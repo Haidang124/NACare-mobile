@@ -1,0 +1,33 @@
+{
+  "@@locale": "vi",
+
+  "appName": "NAHealth",
+  "hospitalName": "Bệnh viện Hữu Nghị Đa Khoa Nghệ An",
+
+  "commonRetry": "Thử lại",
+  "commonSkip": "Bỏ qua",
+  "commonCancel": "Hủy",
+  "commonConfirm": "Xác nhận",
+  "commonEdit": "Sửa",
+  "commonSeeAll": "Xem tất cả",
+  "commonAdd": "Thêm",
+  "commonBack": "Quay lại",
+  "commonClose": "Đóng",
+  "commonLogout": "Đăng xuất",
+  "commonSave": "Lưu",
+
+  "stateEmptyGenericTitle": "Chưa có dữ liệu",
+  "stateEmptyGenericAction": "Thử lại",
+  "stateErrorGenericTitle": "Có lỗi xảy ra",
+  "stateErrorGenericAction": "Thử lại",
+  "stateLoading": "Đang tải…",
+  "statePermissionTitle": "Cần đăng nhập",
+  "statePermissionBody": "Vui lòng đăng nhập để xem nội dung này.",
+  "statePermissionAction": "Đăng nhập",
+
+  "navHome": "Trang chủ",
+  "navAppointments": "Lịch khám",
+  "navResults": "Kết quả",
+  "navNotifications": "Thông báo",
+  "navProfile": "Cá nhân"
+}

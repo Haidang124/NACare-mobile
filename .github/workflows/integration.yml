@@ -1,0 +1,33 @@
+name: E2E (integration_test)
+
+# On-device end-to-end tests. Heavy (a full app build + an Android emulator), so they run
+# nightly and on demand — NOT on every PR. The per-PR gate is the headless suite in ci.yml.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *' # nightly
+
+jobs:
+  android-e2e:
+    name: Android emulator E2E
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Run integration_test on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          working-directory: app
+          script: flutter test integration_test

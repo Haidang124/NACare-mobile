@@ -1,0 +1,29 @@
+# Chủ sở hữu code — GitHub tự gán reviewer khi có PR đụng vào path tương ứng.
+# Cú pháp: <path>  <@user hoặc @org/team>. Dòng dưới ghi đè dòng trên nếu khớp cụ thể hơn.
+# TODO: thay @Haidang124 bằng đúng người phụ trách từng feature khi team mở rộng.
+
+# Mặc định
+*                                   @Haidang124
+
+# Hạ tầng dùng chung — cần review kỹ vì ảnh hưởng mọi feature
+/app/lib/core/                      @Haidang124
+/.github/                           @Haidang124
+/docs/architecture/                 @Haidang124
+
+# Feature — mỗi dòng nên có 1 người "sở hữu"
+/app/lib/features/auth/             @Haidang124
+/app/lib/features/patient_profiles/ @Haidang124
+/app/lib/features/appointments/     @Haidang124
+/app/lib/features/checkin/          @Haidang124
+/app/lib/features/results/          @Haidang124
+/app/lib/features/prescriptions/    @Haidang124
+/app/lib/features/payments/         @Haidang124
+/app/lib/features/notifications/    @Haidang124
+/app/lib/features/health_metrics/   @Haidang124
+/app/lib/features/immunization/     @Haidang124
+/app/lib/features/home/             @Haidang124
+/app/lib/features/profile/          @Haidang124
+/app/lib/features/personal_info/    @Haidang124
+/app/lib/features/security/         @Haidang124
+/app/lib/features/consent/          @Haidang124
+/app/lib/features/shell/            @Haidang124

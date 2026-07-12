@@ -13,8 +13,10 @@ import '../providers/prescriptions_providers.dart';
 class MedicationRemindersScreen extends ConsumerWidget {
   const MedicationRemindersScreen({super.key});
 
-  Future<void> _toggleDose(WidgetRef ref, int index, bool taken) async {
-    await ref.read(prescriptionsRepositoryProvider).markDoseTaken(index, taken);
+  Future<void> _toggleDose(WidgetRef ref, MedicationDose dose) async {
+    await ref
+        .read(prescriptionsRepositoryProvider)
+        .markDoseTaken(dose.id, !dose.taken);
     ref.invalidate(todayDosesProvider);
   }
 
@@ -79,7 +81,7 @@ class MedicationRemindersScreen extends ConsumerWidget {
                             ),
                           ),
                           OutlinedButton(
-                            onPressed: () => _toggleDose(ref, i, !dose.taken),
+                            onPressed: () => _toggleDose(ref, dose),
                             style: OutlinedButton.styleFrom(
                               minimumSize: const Size(0, 38),
                               padding:

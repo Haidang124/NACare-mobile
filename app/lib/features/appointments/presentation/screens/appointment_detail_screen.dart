@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/currency.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../checkin/presentation/providers/checkin_providers.dart';
 import '../../data/models/appointment.dart';
 import '../providers/appointments_providers.dart';
 
@@ -124,7 +125,12 @@ class AppointmentDetailScreen extends ConsumerWidget {
                       AppButton(
                         label: 'Check-in bằng QR',
                         height: 52,
-                        onPressed: () => context.push(AppRoutes.checkin),
+                        onPressed: () {
+                          ref
+                              .read(activeCheckinAppointmentIdProvider.notifier)
+                              .state = appt.id;
+                          context.push(AppRoutes.checkin);
+                        },
                       ),
                       const SizedBox(height: 10),
                       Row(

@@ -143,7 +143,10 @@ class MockAppointmentsRepository implements AppointmentsRepository {
   }
 
   @override
-  Future<Result<List<BookingDateOption>>> getAvailableDates() async {
+  Future<Result<List<BookingDateOption>>> getAvailableDates({
+    required String specialtyId,
+    String? doctorId,
+  }) async {
     await _config.simulateDelay();
     if (_config.shouldFail) return Result.failure(AppFailure.server());
     final today = DateTime.now();
@@ -163,7 +166,10 @@ class MockAppointmentsRepository implements AppointmentsRepository {
 
   @override
   Future<Result<List<BookingTimeOption>>> getAvailableTimes(
-      BookingDateOption date) async {
+    BookingDateOption date, {
+    required String specialtyId,
+    String? doctorId,
+  }) async {
     await _config.simulateDelay();
     if (_config.shouldFail) return Result.failure(AppFailure.server());
     const labels = [

@@ -26,12 +26,14 @@ class Prescription {
 
 class MedicationDose {
   const MedicationDose({
+    required this.id,
     required this.time,
     required this.name,
     required this.note,
     required this.taken,
   });
 
+  final String id;
   final String time;
   final String name;
   final String note;
@@ -39,6 +41,11 @@ class MedicationDose {
 
   MedicationDose copyWith({bool? taken}) {
     return MedicationDose(
-        time: time, name: name, note: note, taken: taken ?? this.taken);
+      id: id,
+      time: time,
+      name: name,
+      note: note,
+      taken: taken ?? this.taken,
+    );
   }
 }

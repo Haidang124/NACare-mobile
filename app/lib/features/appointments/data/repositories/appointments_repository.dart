@@ -10,8 +10,14 @@ abstract class AppointmentsRepository {
 
   Future<Result<List<Specialty>>> getSpecialties();
   Future<Result<List<Doctor>>> getDoctors(String specialtyId);
-  Future<Result<List<BookingDateOption>>> getAvailableDates();
+  Future<Result<List<BookingDateOption>>> getAvailableDates({
+    required String specialtyId,
+    String? doctorId,
+  });
   Future<Result<List<BookingTimeOption>>> getAvailableTimes(
-      BookingDateOption date);
+    BookingDateOption date, {
+    required String specialtyId,
+    String? doctorId,
+  });
   Future<Result<BookingConfirmation>> submitBooking(BookingDraft draft);
 }

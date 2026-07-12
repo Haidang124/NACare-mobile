@@ -16,6 +16,10 @@ dependencies:
   flutter_riverpod: ^2.5.1
   go_router: ^14.6.2
 
+  # Networking (real API layer) & secure token storage
+  dio: ^5.7.0
+  flutter_secure_storage: ^9.2.2
+
   # UI / design system
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.8

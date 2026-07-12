@@ -42,13 +42,15 @@ class BookingStepSpecialty extends ConsumerWidget {
         AsyncValueView<List<Specialty>>(
           value: specialtiesAsync,
           onRetry: () => ref.invalidate(specialtiesProvider),
-          data: (context, specialties) => GridView.count(
-            crossAxisCount: 2,
+          data: (context, specialties) => GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1.5,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisExtent: 132,
+            ),
             children: specialties.map((s) {
               final isSelected = selected?.id == s.id;
               return AppCard(
@@ -74,7 +76,9 @@ class BookingStepSpecialty extends ConsumerWidget {
                     Text(s.name,
                         style: AppTypography.bodyBold.copyWith(fontSize: 14.5)),
                     Text(s.note,
-                        style: AppTypography.caption.copyWith(fontSize: 12.5)),
+                        style: AppTypography.caption.copyWith(fontSize: 12.5),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
                   ],
                 ),
               );

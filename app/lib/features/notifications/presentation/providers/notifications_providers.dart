@@ -1,13 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/config/config_providers.dart';
+import '../../../../core/network/api_providers.dart';
 import '../../../../core/network/mock_config.dart';
 import '../../data/models/notification_item.dart';
+import '../../data/repositories/api_notifications_repository.dart';
 import '../../data/repositories/mock_notifications_repository.dart';
 import '../../data/repositories/notifications_repository.dart';
 
 final notificationsRepositoryProvider =
     Provider<NotificationsRepository>((ref) {
-  return MockNotificationsRepository(ref.watch(mockConfigProvider));
+  if (ref.watch(useMockProvider)) {
+    return MockNotificationsRepository(ref.watch(mockConfigProvider));
+  }
+  return ApiNotificationsRepository(ref.watch(dioProvider));
 });
 
 final notificationFilterProvider =
@@ -21,7 +27,11 @@ final notificationsProvider =
 });
 
 /// Used by the notification bell badge on the Home screen.
-final unreadNotificationCountProvider = Provider<int>((ref) {
-  final items = ref.watch(notificationsProvider).valueOrNull ?? const [];
+final unreadNotificationCountProvider = FutureProvider<int>((ref) async {
+  final repo = ref.watch(notificationsRepositoryProvider);
+  if (repo is ApiNotificationsRepository) {
+    return (await repo.getUnreadCount()).dataOrThrow;
+  }
+  final items = (await repo.getNotifications()).dataOrThrow;
   return items.where((n) => n.unread).length;
 });

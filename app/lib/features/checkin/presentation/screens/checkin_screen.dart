@@ -22,7 +22,8 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
 
   Future<void> _confirmCheckin() async {
     setState(() => _isCheckingIn = true);
-    final result = await ref.read(checkinRepositoryProvider).checkin('a1');
+    final appointmentId = ref.read(activeCheckinAppointmentIdProvider);
+    final result = await ref.read(checkinRepositoryProvider).checkin(appointmentId);
     if (!mounted) return;
     setState(() => _isCheckingIn = false);
     result.when(

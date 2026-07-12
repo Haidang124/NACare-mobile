@@ -1,16 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/config/config_providers.dart';
+import '../../../../core/network/api_providers.dart';
 import '../../../../core/network/mock_config.dart';
 import '../../data/models/patient_profile.dart';
+import '../../data/repositories/api_patient_profiles_repository.dart';
 import '../../data/repositories/mock_patient_profiles_repository.dart';
 import '../../data/repositories/patient_profiles_repository.dart';
 
-/// The single join point between the UI and the data layer: switching to the real API
-/// later only requires editing this provider (return `ApiPatientProfilesRepository(...)`
-/// instead of the mock), with no widget changes.
+/// The single join point between the UI and the data layer. Mock ↔ real do cờ
+/// [useMockProvider] quyết định; widget/provider phía dưới không đổi.
 final patientProfilesRepositoryProvider =
     Provider<PatientProfilesRepository>((ref) {
-  return MockPatientProfilesRepository(ref.watch(mockConfigProvider));
+  if (ref.watch(useMockProvider)) {
+    return MockPatientProfilesRepository(ref.watch(mockConfigProvider));
+  }
+  return ApiPatientProfilesRepository(ref.watch(dioProvider));
 });
 
 final patientProfilesProvider =

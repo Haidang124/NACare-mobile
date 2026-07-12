@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../checkin/presentation/providers/checkin_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../patient_profiles/presentation/providers/patient_profiles_providers.dart';
 import '../../../patient_profiles/presentation/widgets/profile_switcher_sheet.dart';
@@ -27,7 +28,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardAsync = ref.watch(homeDashboardProvider);
     final profile = ref.watch(activeProfileProvider);
-    final unreadCount = ref.watch(unreadNotificationCountProvider);
+    final unreadCount = ref.watch(unreadNotificationCountProvider).valueOrNull ?? 0;
 
     return Scaffold(
       body: SafeArea(
@@ -61,7 +62,14 @@ class HomeScreen extends ConsumerWidget {
                         Transform.translate(
                           offset: const Offset(0, -36),
                           child: _TodayAppointmentCard(
-                              appointment: dashboard.todayAppointment!),
+                            appointment: dashboard.todayAppointment!,
+                            onCheckin: () {
+                              ref
+                                  .read(activeCheckinAppointmentIdProvider.notifier)
+                                  .state = dashboard.todayAppointment!.id;
+                              context.push(AppRoutes.checkin);
+                            },
+                          ),
                         ),
                       _ShortcutsGrid(
                           offsetTop: dashboard.todayAppointment != null),
@@ -209,8 +217,12 @@ class _Header extends StatelessWidget {
 }
 
 class _TodayAppointmentCard extends StatelessWidget {
-  const _TodayAppointmentCard({required this.appointment});
+  const _TodayAppointmentCard({
+    required this.appointment,
+    required this.onCheckin,
+  });
   final TodayAppointmentSummary appointment;
+  final VoidCallback onCheckin;
 
   @override
   Widget build(BuildContext context) {
@@ -241,7 +253,7 @@ class _TodayAppointmentCard extends StatelessWidget {
                   child: AppButton(
                     label: 'Check-in',
                     height: 46,
-                    onPressed: () => context.push(AppRoutes.checkin),
+                    onPressed: onCheckin,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -296,13 +308,15 @@ class _ShortcutsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Transform.translate(
       offset: Offset(0, offsetTop ? -20 : 0),
-      child: GridView.count(
-        crossAxisCount: 4,
+      child: GridView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 0.85,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          mainAxisExtent: 110,
+        ),
         children: List.generate(_shortcuts.length, (i) {
           final s = _shortcuts[i];
           return AppCard(

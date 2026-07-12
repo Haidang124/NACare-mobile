@@ -42,7 +42,7 @@ class ProfileTabScreen extends ConsumerWidget {
       destructive: true,
     );
     if (!confirmed) return;
-    ref.read(sessionControllerProvider.notifier).logout();
+    await ref.read(sessionControllerProvider.notifier).logout();
   }
 
   @override
@@ -129,7 +129,7 @@ class ProfileTabScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 96,
+                height: 116,
                 child: AsyncValueView<List<PatientProfile>>(
                   value: familyAsync,
                   onRetry: () => ref.invalidate(patientProfilesProvider),

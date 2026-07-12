@@ -40,16 +40,19 @@ class MockPrescriptionsRepository implements PrescriptionsRepository {
   // Today's reminder schedule matches the mockup (08:00 combines 2 pills, 12:00, 20:00).
   final List<MedicationDose> _doses = [
     const MedicationDose(
+        id: 'dose-08',
         time: '08:00',
         name: 'Amlodipin 5mg + Metformin 500mg',
         note: '2 viên · sau ăn sáng',
         taken: true),
     const MedicationDose(
+        id: 'dose-12',
         time: '12:00',
         name: 'Vitamin D3 1000 IU',
         note: '1 viên · cùng bữa trưa',
         taken: false),
     const MedicationDose(
+        id: 'dose-20',
         time: '20:00',
         name: 'Metformin 500mg',
         note: '1 viên · sau ăn tối',
@@ -71,9 +74,10 @@ class MockPrescriptionsRepository implements PrescriptionsRepository {
   }
 
   @override
-  Future<Result<void>> markDoseTaken(int index, bool taken) async {
+  Future<Result<void>> markDoseTaken(String doseId, bool taken) async {
     await _config.simulateDelay();
     if (_config.shouldFail) return Result.failure(AppFailure.server());
+    final index = _doses.indexWhere((dose) => dose.id == doseId);
     if (index >= 0 && index < _doses.length) {
       _doses[index] = _doses[index].copyWith(taken: taken);
     }

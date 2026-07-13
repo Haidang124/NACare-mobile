@@ -30,6 +30,8 @@ import '../../features/results/presentation/screens/results_tab_screen.dart';
 import '../../features/security/presentation/screens/consent_management_screen.dart';
 import '../../features/security/presentation/screens/security_screen.dart';
 import '../../features/shell/presentation/app_shell.dart';
+import '../../features/treatments/presentation/screens/emr_pdf_screen.dart';
+import '../../features/treatments/presentation/screens/treatment_documents_screen.dart';
 import 'app_routes.dart';
 
 // The full route → file table lives in docs/architecture/02-danh-sach-man-hinh.md.
@@ -149,6 +151,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
           path: AppRoutes.personalInfo,
           builder: (context, state) => const PersonalInfoScreen()),
+      GoRoute(
+        path: AppRoutes.treatmentDocuments,
+        builder: (context, state) => TreatmentDocumentsScreen(
+          treatmentCode:
+              Uri.decodeComponent(state.pathParameters['code'] ?? ''),
+          treatmentTitle: state.extra as String?,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.emrDocument,
+        builder: (context, state) => EmrPdfScreen(
+          treatmentCode:
+              Uri.decodeComponent(state.pathParameters['code'] ?? ''),
+          documentId: Uri.decodeComponent(state.pathParameters['docId'] ?? ''),
+          documentName: state.extra as String? ?? 'Phiếu EMR',
+        ),
+      ),
       GoRoute(
           path: AppRoutes.payments,
           builder: (context, state) => const PaymentsScreen()),

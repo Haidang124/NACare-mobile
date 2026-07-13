@@ -15,11 +15,9 @@ final resultsRepositoryProvider = Provider<ResultsRepository>((ref) {
   return ApiResultsRepository(ref.watch(dioProvider));
 });
 
-final examResultsProvider =
-    FutureProvider.autoDispose<List<ExamResultSummary>>((ref) async {
-  return (await ref.watch(resultsRepositoryProvider).getResults()).dataOrThrow;
-});
-
+// Danh sách "kết quả khám" giờ hiển thị theo lần điều trị thật (feature treatments) —
+// xem `ResultsTabScreen`. `examResultsProvider`/`getResults` (gọi `/patient/results`
+// không có trên BE) đã gỡ. Chi tiết ExamResult vẫn dùng cho deep-link cũ (home/lịch hẹn).
 final examResultDetailProvider = FutureProvider.autoDispose
     .family<ExamResultDetail, String>((ref, id) async {
   return (await ref.watch(resultsRepositoryProvider).getResultDetail(id))

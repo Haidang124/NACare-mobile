@@ -77,9 +77,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     setState(() => _isVerifying = false);
 
     result.when(
-      success: (match) {
-        ref.read(authFlowControllerProvider.notifier).setMatch(match);
-        context.push(AppRoutes.linkProfile);
+      success: (verify) {
+        // Đã liên kết hồ sơ HIS ⇒ vào thẳng bước tạo PIN; chưa thì rẽ sang màn liên kết.
+        context.push(
+          verify.profileLinked ? AppRoutes.pinSetup : AppRoutes.linkProfile,
+        );
       },
       failure: (f) => setState(() => _errorText = f.message),
     );

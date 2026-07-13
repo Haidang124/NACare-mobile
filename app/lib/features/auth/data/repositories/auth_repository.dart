@@ -1,16 +1,35 @@
 import '../../../../core/network/result.dart';
 import '../models/linked_patient_match.dart';
+import '../models/otp_verify_result.dart';
 
-/// Decouples the login UI from how the real system verifies OTP / looks up the HIS.
-/// Presentation only calls these methods, unaware of the mock or real API behind them.
+/// Tách UI đăng nhập khỏi cách hệ thống thật xác thực OTP / tra cứu HIS.
+/// Presentation chỉ gọi các hàm này, không biết phía sau là mock hay API thật.
 abstract class AuthRepository {
+  /// Gửi OTP đăng nhập tới số điện thoại. `POST /patient/auth/otp`.
   Future<Result<void>> sendOtp(String phone);
 
-  /// Returns the HIS profile matching the phone number (null if none → create a new profile).
-  Future<Result<LinkedPatientMatch?>> verifyOtp(
-      {required String phone, required String otp});
+  /// Xác thực OTP. Token được lưu ngay trong repo; trả cờ [OtpVerifyResult.profileLinked]
+  /// để presentation biết đã liên kết hồ sơ HIS chưa. `POST /patient/auth/otp/verify`.
+  Future<Result<OtpVerifyResult>> verifyOtp({
+    required String phone,
+    required String otp,
+  });
 
-  Future<Result<void>> linkProfile();
-  Future<Result<void>> createNewProfile();
+  /// Kiểm tra token còn hợp lệ (dùng khi bootstrap phiên lúc mở app). `GET /patient/me`.
+  Future<Result<void>> checkSession();
+
+  /// Tìm hồ sơ HIS để liên kết — theo CCCD, kèm họ tên/ngày sinh nếu có (Flow A).
+  /// `POST /patient/his-search`.
+  Future<Result<List<LinkedPatientMatch>>> searchHisProfiles({
+    required String citizenId,
+    String? fullName,
+    DateTime? dateOfBirth,
+  });
+
+  /// Liên kết tài khoản đang đăng nhập với một hồ sơ HIS; trả về `profileId` vừa tạo.
+  /// `POST /patient/link-profile`.
+  Future<Result<String>> linkProfile(String hisPatientCode);
+
+  /// PIN mở khoá cục bộ trên máy (không thuộc API) — xử lý riêng sau.
   Future<Result<void>> setPin(String pin);
 }

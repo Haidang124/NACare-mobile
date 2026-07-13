@@ -5,7 +5,6 @@ import '../../../../core/network/api_providers.dart';
 import '../../../../core/network/auth_events.dart';
 import '../../../../core/network/mock_config.dart';
 import '../../../../core/network/token_store.dart';
-import '../../data/models/linked_patient_match.dart';
 import '../../data/repositories/api_auth_repository.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/mock_auth_repository.dart';
@@ -44,9 +43,13 @@ class SessionController extends Notifier<SessionState> {
   }
 
   Future<void> _restore() async {
-    if (await ref.read(tokenStoreProvider).hasSession) {
-      state = state.copyWith(isAuthenticated: true);
-    }
+    if (!await ref.read(tokenStoreProvider).hasSession) return;
+    // Có token lưu sẵn nhưng phải xác nhận còn hợp lệ (GET /patient/me): token hết hạn
+    // sẽ bị interceptor 401 xoá phiên; chỉ coi là đã đăng nhập khi /me trả 200.
+    final ok = await ref.read(authRepositoryProvider).checkSession();
+    state = state.copyWith(
+      isAuthenticated: ok.when(success: (_) => true, failure: (_) => false),
+    );
   }
 
   void completeLogin() => state = state.copyWith(isAuthenticated: true);
@@ -63,22 +66,12 @@ final sessionControllerProvider =
 // ─────────────────────────── Auth flow (temporary data across steps) ───────────────────────────
 
 class AuthFlowState {
-  const AuthFlowState({this.phone = '', this.match, this.isNewProfile = false});
+  const AuthFlowState({this.phone = ''});
 
   final String phone;
-  final LinkedPatientMatch? match;
-  final bool isNewProfile;
 
-  AuthFlowState copyWith(
-      {String? phone,
-      LinkedPatientMatch? match,
-      bool? isNewProfile,
-      bool clearMatch = false}) {
-    return AuthFlowState(
-      phone: phone ?? this.phone,
-      match: clearMatch ? null : (match ?? this.match),
-      isNewProfile: isNewProfile ?? this.isNewProfile,
-    );
+  AuthFlowState copyWith({String? phone}) {
+    return AuthFlowState(phone: phone ?? this.phone);
   }
 
   String get maskedPhone {
@@ -92,14 +85,6 @@ class AuthFlowController extends Notifier<AuthFlowState> {
   AuthFlowState build() => const AuthFlowState();
 
   void setPhone(String phone) => state = state.copyWith(phone: phone);
-
-  void setMatch(LinkedPatientMatch? match) {
-    state = state.copyWith(
-        match: match, clearMatch: match == null, isNewProfile: match == null);
-  }
-
-  void chooseCreateNewProfile() =>
-      state = state.copyWith(isNewProfile: true, clearMatch: true);
 
   void reset() => state = const AuthFlowState();
 }

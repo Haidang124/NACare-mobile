@@ -29,6 +29,9 @@ abstract final class AppRoutes {
 
   // Profile
   static const String personalInfo = '/profile/personal-info';
+  static const String treatmentDocuments = '/profile/treatments/:code/documents';
+  static const String emrDocument =
+      '/profile/treatments/:code/documents/:docId';
   static const String payments = '/profile/payments';
   static const String billDetail = '/profile/payments/:id';
   static const String immunization = '/profile/immunization';
@@ -41,4 +44,8 @@ abstract final class AppRoutes {
   static String prescriptionPath(String resultId) =>
       '/results/$resultId/prescription';
   static String billDetailPath(String id) => '/profile/payments/$id';
+  static String treatmentDocumentsPath(String code) =>
+      '/profile/treatments/${Uri.encodeComponent(code)}/documents';
+  static String emrDocumentPath(String code, String docId) =>
+      '/profile/treatments/${Uri.encodeComponent(code)}/documents/${Uri.encodeComponent(docId)}';
 }

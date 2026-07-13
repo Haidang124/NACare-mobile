@@ -6,42 +6,22 @@ import '../../../../core/utils/formatting.dart';
 import '../models/exam_result.dart';
 import 'results_repository.dart';
 
-/// Bản thật của [ResultsRepository] — module Results của BE (đọc kết quả khám/LIS qua BE).
-///   GET /patient/results        → danh sách kết quả
+/// Bản thật của [ResultsRepository] — chi tiết một kết quả khám (deep-link cũ).
 ///   GET /patient/results/{id}   → chi tiết một kết quả
 ///
-/// BE trả `ResultDto(id, resultDateUtc, title, doctorName?, summary?, measurements[])`.
+/// ⚠️ Endpoint này **hiện chưa có trên BE** (danh sách kết quả đã chuyển sang lần điều trị
+/// / phiếu EMR, xem feature treatments). Giữ lại cho các deep-link cũ; sẽ nối khi BE có.
+/// BE (dự kiến) trả `ResultDto(id, resultDateUtc, title, doctorName?, summary?, measurements[])`.
 class ApiResultsRepository implements ResultsRepository {
   ApiResultsRepository(this._dio);
 
   final Dio _dio;
 
   @override
-  Future<Result<List<ExamResultSummary>>> getResults() => apiCall(
-        () => _dio.get('/patient/results'),
-        (json) => (json as List)
-            .map((e) => _mapSummary((e as Map).cast<String, dynamic>()))
-            .toList(),
-      );
-
-  @override
   Future<Result<ExamResultDetail>> getResultDetail(String id) => apiCall(
         () => _dio.get('/patient/results/$id'),
         (json) => _mapDetail((json as Map).cast<String, dynamic>()),
       );
-
-  ExamResultSummary _mapSummary(Map<String, dynamic> j) {
-    final dateUtc = DateTime.parse(j['resultDateUtc'] as String);
-    return ExamResultSummary(
-      id: j['id'].toString(),
-      date: vnDate(dateUtc),
-      // BE chưa có cờ "mới" → tạm coi là mới nếu trong 7 ngày.
-      isNew: DateTime.now().difference(dateUtc.toLocal()).inDays < 7,
-      title: (j['title'] as String?) ?? '',
-      doctor: (j['doctorName'] as String?) ?? '',
-      tags: const [], // TODO: BE chưa có tags (có thể suy từ measurements bất thường).
-    );
-  }
 
   ExamResultDetail _mapDetail(Map<String, dynamic> j) {
     final labs = ((j['measurements'] as List?) ?? const [])

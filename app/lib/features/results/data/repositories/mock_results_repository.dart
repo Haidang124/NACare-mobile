@@ -8,33 +8,6 @@ class MockResultsRepository implements ResultsRepository {
 
   final MockConfig _config;
 
-  static const _summaries = [
-    ExamResultSummary(
-      id: 'r1',
-      date: '28/06/2026',
-      isNew: true,
-      title: 'Khám Nội tổng quát',
-      doctor: 'ThS.BS Lê Hồng Nhung',
-      tags: ['Xét nghiệm máu', 'Đơn thuốc'],
-    ),
-    ExamResultSummary(
-      id: 'r2',
-      date: '15/03/2026',
-      isNew: false,
-      title: 'Khám Tim mạch',
-      doctor: 'BS.CKI Trần Minh Đức',
-      tags: ['Điện tim', 'Siêu âm tim'],
-    ),
-    ExamResultSummary(
-      id: 'r3',
-      date: '02/12/2025',
-      isNew: false,
-      title: 'Khám sức khỏe định kỳ',
-      doctor: 'Khoa Khám bệnh',
-      tags: ['Tổng quát', 'X-quang'],
-    ),
-  ];
-
   static const _detail = ExamResultDetail(
     id: 'r1',
     title: 'Khám Nội tổng quát',
@@ -78,14 +51,6 @@ class MockResultsRepository implements ResultsRepository {
     attachmentName: 'KetQua_XetNghiem_28-06.pdf',
     attachmentSize: '248 KB',
   );
-
-  @override
-  Future<Result<List<ExamResultSummary>>> getResults() async {
-    await _config.simulateDelay();
-    if (_config.shouldFail) return Result.failure(AppFailure.server());
-    if (_config.forceEmpty) return const Result.success([]);
-    return const Result.success(_summaries);
-  }
 
   @override
   Future<Result<ExamResultDetail>> getResultDetail(String id) async {

@@ -66,12 +66,18 @@ final sessionControllerProvider =
 // ─────────────────────────── Auth flow (temporary data across steps) ───────────────────────────
 
 class AuthFlowState {
-  const AuthFlowState({this.phone = ''});
+  const AuthFlowState({this.phone = '', this.debugOtp});
 
   final String phone;
 
-  AuthFlowState copyWith({String? phone}) {
-    return AuthFlowState(phone: phone ?? this.phone);
+  /// Mã OTP do BE lộ ra để test (Development/Staging); null ở môi trường thật.
+  final String? debugOtp;
+
+  AuthFlowState copyWith({String? phone, String? debugOtp}) {
+    return AuthFlowState(
+      phone: phone ?? this.phone,
+      debugOtp: debugOtp ?? this.debugOtp,
+    );
   }
 
   String get maskedPhone {
@@ -85,6 +91,9 @@ class AuthFlowController extends Notifier<AuthFlowState> {
   AuthFlowState build() => const AuthFlowState();
 
   void setPhone(String phone) => state = state.copyWith(phone: phone);
+
+  void setDebugOtp(String? code) =>
+      state = AuthFlowState(phone: state.phone, debugOtp: code);
 
   void reset() => state = const AuthFlowState();
 }

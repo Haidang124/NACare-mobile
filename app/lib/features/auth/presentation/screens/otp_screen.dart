@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/network/mock_config.dart';
+import '../../../../core/network/result.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../patient_profiles/presentation/providers/patient_profiles_providers.dart';
+import '../../data/models/otp_verify_result.dart';
 import '../providers/auth_providers.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
@@ -55,8 +58,14 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   Future<void> _resend() async {
     if (_secondsLeft > 0) return;
     final phone = ref.read(authFlowControllerProvider).phone;
-    await ref.read(authRepositoryProvider).sendOtp(phone);
+    final res = await ref.read(authRepositoryProvider).sendOtp(phone);
     if (!mounted) return;
+    // Cập nhật mã debug mới (nếu BE lộ mã) để gợi ý luôn khớp lần gửi lại.
+    res.when(
+      success: (code) =>
+          ref.read(authFlowControllerProvider.notifier).setDebugOtp(code),
+      failure: (_) {},
+    );
     _startCountdown();
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Đã gửi lại mã OTP')));
@@ -76,12 +85,31 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     if (!mounted) return;
     setState(() => _isVerifying = false);
 
-    result.when(
-      success: (verify) {
-        // Đã liên kết hồ sơ HIS ⇒ vào thẳng bước tạo PIN; chưa thì rẽ sang màn liên kết.
-        context.push(
-          verify.profileLinked ? AppRoutes.pinSetup : AppRoutes.linkProfile,
-        );
+    if (result is Failure<OtpVerifyResult>) {
+      setState(() => _errorText = result.failure.message);
+      return;
+    }
+
+    await _advanceAfterVerifiedOtp();
+  }
+
+  Future<void> _advanceAfterVerifiedOtp() async {
+    final profilesResult =
+        await ref.read(patientProfilesRepositoryProvider).getProfiles();
+    if (!mounted) return;
+
+    profilesResult.when(
+      success: (profiles) {
+        if (profiles.isEmpty) {
+          context.push(AppRoutes.linkProfile);
+          return;
+        }
+
+        final selfIndex = profiles.indexWhere((p) => p.isSelf);
+        final selected = selfIndex >= 0 ? profiles[selfIndex] : profiles.first;
+        ref.read(activeProfileIdProvider.notifier).state = selected.id;
+        ref.invalidate(patientProfilesProvider);
+        context.push(AppRoutes.pinSetup);
       },
       failure: (f) => setState(() => _errorText = f.message),
     );
@@ -89,7 +117,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final phone = ref.watch(authFlowControllerProvider).maskedPhone;
+    final flow = ref.watch(authFlowControllerProvider);
+    final phone = flow.maskedPhone;
+    final debugOtp = flow.debugOtp;
 
     return Scaffold(
       appBar:
@@ -160,19 +190,29 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.xxl),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppColors.greenTintSoft,
-                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            if (debugOtp != null) ...[
+              const SizedBox(height: AppSpacing.xxl),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: debugOtp));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Đã sao chép mã OTP')),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppColors.greenTintSoft,
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                  ),
+                  child: Text(
+                    'Mã OTP thử nghiệm: $debugOtp (BE đang lộ mã để test — chạm để sao chép).',
+                    style: AppTypography.caption
+                        .copyWith(fontSize: 13, color: AppColors.primaryDark),
+                  ),
+                ),
               ),
-              child: Text(
-                'Mã demo: $kMockValidOtp (bản mock chưa nối SMS gateway thật).',
-                style: AppTypography.caption
-                    .copyWith(fontSize: 13, color: AppColors.primaryDark),
-              ),
-            ),
+            ],
           ],
         ),
       ),

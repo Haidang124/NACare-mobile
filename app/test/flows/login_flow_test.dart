@@ -16,6 +16,6 @@ void main() {
     await gotoOtpScreen(tester);
 
     // The OTP screen shows the demo-code hint once we're on it.
-    expect(find.textContaining('Mã demo'), findsOneWidget);
+    expect(find.textContaining('Mã OTP thử nghiệm'), findsOneWidget);
   });
 }

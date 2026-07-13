@@ -6,7 +6,9 @@ import '../models/otp_verify_result.dart';
 /// Presentation chỉ gọi các hàm này, không biết phía sau là mock hay API thật.
 abstract class AuthRepository {
   /// Gửi OTP đăng nhập tới số điện thoại. `POST /patient/auth/otp`.
-  Future<Result<void>> sendOtp(String phone);
+  /// Trả `debugOtp` nếu BE bật lộ mã (Development/Staging hoặc `PatientOtp:ExposeDebugOtp`);
+  /// null ở môi trường thật — dùng để hiện gợi ý mã khi test.
+  Future<Result<String?>> sendOtp(String phone);
 
   /// Xác thực OTP. Token được lưu ngay trong repo; trả cờ [OtpVerifyResult.profileLinked]
   /// để presentation biết đã liên kết hồ sơ HIS chưa. `POST /patient/auth/otp/verify`.

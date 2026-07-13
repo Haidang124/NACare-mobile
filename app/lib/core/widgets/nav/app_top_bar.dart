@@ -25,8 +25,10 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
   final bool showBorder;
 
+  // Cần cao hơn khi có subtitle: title (18sp) + subtitle (13sp) + padding dọc vượt 64px
+  // → tràn "BOTTOM OVERFLOWED". Chỉ-title thì 64px là đủ.
   @override
-  Size get preferredSize => const Size.fromHeight(64);
+  Size get preferredSize => Size.fromHeight(subtitle == null ? 64 : 78);
 
   @override
   Widget build(BuildContext context) {

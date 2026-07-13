@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/result.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../security/presentation/providers/security_providers.dart';
 import '../providers/auth_providers.dart';
 
 class PinSetupScreen extends ConsumerStatefulWidget {
@@ -22,9 +24,32 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     setState(() => _isSubmitting = true);
     final result = await ref.read(authRepositoryProvider).setPin(pin);
     if (!mounted) return;
-    setState(() => _isSubmitting = false);
+    if (result is Failure) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(result.failure.message)));
+    } else {
+      await _goNextAfterPin();
+    }
+    if (mounted) setState(() => _isSubmitting = false);
+  }
+
+  Future<void> _goNextAfterPin() async {
+    final result = await ref.read(securityRepositoryProvider).getConsentItems();
+    if (!mounted) return;
+
     result.when(
-      success: (_) => context.push(AppRoutes.consent),
+      success: (items) {
+        final hasMissingRequired =
+            items.any((item) => item.locked && !item.enabled);
+        if (hasMissingRequired) {
+          context.push(AppRoutes.consent);
+          return;
+        }
+
+        ref.read(sessionControllerProvider.notifier).completeLogin();
+        ref.read(authFlowControllerProvider.notifier).reset();
+        context.go(AppRoutes.home);
+      },
       failure: (f) => ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(f.message))),
     );
@@ -69,7 +94,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 variant: AppButtonVariant.text,
                 expanded: false,
                 height: 44,
-                onPressed: () => context.push(AppRoutes.consent),
+                onPressed: _goNextAfterPin,
               ),
             ],
           ),

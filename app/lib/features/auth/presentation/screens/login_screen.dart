@@ -45,8 +45,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _isSubmitting = false);
 
     result.when(
-      success: (_) {
+      success: (debugOtp) {
         ref.read(authFlowControllerProvider.notifier).setPhone(phone);
+        // Lưu mã BE lộ ra (nếu có) để màn OTP hiện gợi ý.
+        ref.read(authFlowControllerProvider.notifier).setDebugOtp(debugOtp);
         context.push(AppRoutes.otp);
       },
       failure: (f) => setState(() => _errorText = f.message),

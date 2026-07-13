@@ -11,6 +11,10 @@ import '../../data/repositories/api_emr_repository.dart';
 import '../../data/repositories/emr_repository.dart';
 import '../../data/repositories/mock_emr_repository.dart';
 
+/// Loại phiếu bệnh nhân được xem: chỉ "Phiếu kết quả" (kết quả XN, điện tim, siêu âm… đều
+/// nằm dưới loại này). Bỏ qua phiếu chỉ định/order và vỏ bệnh án. Đổi ở đây nếu BV muốn thêm.
+const String kPatientDocumentType = 'Phiếu kết quả';
+
 /// Mock ↔ API thật theo cờ [useMockProvider].
 final emrRepositoryProvider = Provider<EmrRepository>((ref) {
   if (ref.watch(useMockProvider)) {
@@ -28,6 +32,7 @@ final treatmentDocumentsProvider = FutureProvider.autoDispose
   return (await ref.watch(emrRepositoryProvider).getDocuments(
             profileId: profile.id,
             treatmentCode: treatmentCode,
+            type: kPatientDocumentType,
           ))
       .dataOrThrow;
 });

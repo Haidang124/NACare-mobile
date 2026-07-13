@@ -1,11 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/config/config_providers.dart';
+import '../../../../core/network/api_providers.dart';
 import '../../../../core/network/mock_config.dart';
 import '../../data/models/security_settings.dart';
+import '../../data/repositories/api_security_repository.dart';
 import '../../data/repositories/mock_security_repository.dart';
 import '../../data/repositories/security_repository.dart';
 
 final securityRepositoryProvider = Provider<SecurityRepository>((ref) {
+  if (!ref.watch(useMockProvider)) {
+    return ApiSecurityRepository(ref.watch(dioProvider));
+  }
   return MockSecurityRepository(ref.watch(mockConfigProvider));
 });
 

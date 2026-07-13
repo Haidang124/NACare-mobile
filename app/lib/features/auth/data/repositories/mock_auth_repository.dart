@@ -10,10 +10,11 @@ class MockAuthRepository implements AuthRepository {
   final MockConfig _config;
 
   @override
-  Future<Result<void>> sendOtp(String phone) async {
+  Future<Result<String?>> sendOtp(String phone) async {
     await _config.simulateDelay();
     if (_config.shouldFail) return Result.failure(AppFailure.network());
-    return const Result.success(null);
+    // Bản mock "lộ" luôn mã demo qua cùng kênh debugOtp để màn OTP hiện gợi ý.
+    return const Result.success(kMockValidOtp);
   }
 
   @override

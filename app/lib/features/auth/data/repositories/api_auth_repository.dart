@@ -24,8 +24,10 @@ class ApiAuthRepository implements AuthRepository {
   final TokenStore _tokens;
 
   @override
-  Future<Result<void>> sendOtp(String phone) => apiCallVoid(
+  Future<Result<String?>> sendOtp(String phone) => apiCall(
         () => _dio.post('/patient/auth/otp', data: {'phoneNumber': phone}),
+        // OtpChallengeDto: chỉ lấy debugOtp (nếu BE lộ mã để test); phần còn lại bỏ qua.
+        (json) => (json as Map)['debugOtp'] as String?,
       );
 
   @override

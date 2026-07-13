@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../security/presentation/providers/security_providers.dart';
 
 /// Must be read & accepted before entering the app, per Decree 13/2023/NĐ-CP
 /// (ui-ux-app-benh-nhan.md — design principles, "sensitive medical data" section).
@@ -20,9 +21,49 @@ class ConsentScreen extends ConsumerStatefulWidget {
 
 class _ConsentScreenState extends ConsumerState<ConsentScreen> {
   bool _agreed = false;
+  bool _isSubmitting = false;
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_agreed) return;
+    setState(() => _isSubmitting = true);
+
+    final itemsResult =
+        await ref.read(securityRepositoryProvider).getConsentItems();
+    if (!mounted) return;
+
+    final missingRequired = itemsResult.when(
+      success: (items) => items.where((item) => item.locked && !item.enabled),
+      failure: (failure) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(failure.message)));
+        return null;
+      },
+    );
+
+    if (missingRequired == null) {
+      setState(() => _isSubmitting = false);
+      return;
+    }
+
+    for (final item in missingRequired) {
+      final result =
+          await ref.read(securityRepositoryProvider).setConsent(item.id, true);
+      if (!mounted) return;
+      final failed = result.when(
+        success: (_) => false,
+        failure: (failure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(failure.message)));
+          return true;
+        },
+      );
+      if (failed) {
+        setState(() => _isSubmitting = false);
+        return;
+      }
+    }
+
+    ref.invalidate(consentItemsProvider);
     ref.read(sessionControllerProvider.notifier).completeLogin();
     ref.read(authFlowControllerProvider.notifier).reset();
     context.go(AppRoutes.home);
@@ -147,7 +188,8 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen> {
               const SizedBox(height: 16),
               AppButton(
                 label: 'Đồng ý và vào ứng dụng',
-                onPressed: _agreed ? _submit : null,
+                isLoading: _isSubmitting,
+                onPressed: _agreed && !_isSubmitting ? _submit : null,
               ),
             ],
           ),

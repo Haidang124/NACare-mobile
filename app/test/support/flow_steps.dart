@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:nahealth_app/app.dart';
-import 'package:nahealth_app/core/keys.dart';
-import 'package:nahealth_app/core/network/mock_config.dart';
-import 'package:nahealth_app/features/auth/presentation/providers/auth_providers.dart';
+import 'package:nacare_app/app.dart';
+import 'package:nacare_app/core/keys.dart';
+import 'package:nacare_app/core/network/mock_config.dart';
+import 'package:nacare_app/features/auth/presentation/providers/auth_providers.dart';
 
 /// A session that starts already authenticated — lets a test land on the home tabs
 /// without driving the whole login flow first.
@@ -55,7 +55,7 @@ Future<void> pumpApp(WidgetTester tester, {bool authenticated = false}) async {
         if (authenticated)
           sessionControllerProvider.overrideWith(_AuthedSession.new),
       ],
-      child: const NahealthApp(),
+      child: const NacareApp(),
     ),
   );
   await tester.pumpAndSettle();

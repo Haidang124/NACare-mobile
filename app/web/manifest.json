@@ -1,6 +1,6 @@
 {
-    "name": "nahealth_app",
-    "short_name": "nahealth_app",
+    "name": "nacare_app",
+    "short_name": "nacare_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

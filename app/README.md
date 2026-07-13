@@ -1,4 +1,4 @@
-# NAHealth App
+# NACare App
 
 Ứng dụng Flutter cho bệnh nhân của Bệnh viện Hữu Nghị Đa Khoa Nghệ An. Xem [`../docs/architecture/`](../docs/architecture/) để biết kiến trúc, cấu trúc thư mục và danh sách màn hình.
 
@@ -8,7 +8,7 @@ Máy viết code này không có Flutter SDK cài sẵn nên phần khung native
 
 ```bash
 cd app
-flutter create --platforms=android,ios,web --org com.nahealth --project-name nahealth_app .
+flutter create --platforms=android,ios,web --org com.nacare --project-name nacare_app .
 flutter pub get
 flutter gen-l10n
 flutter run
@@ -18,5 +18,5 @@ Lệnh `flutter create .` với các flag trên sẽ chỉ tạo thêm các thư
 
 ## Trạng thái
 
-- Toàn bộ 25 màn hình theo mockup ở `NaHealth-UI/NAHealth App.dc.html` đã được viết bằng Flutter, dùng dữ liệu mock (fake delay/fake error) — chưa nối API thật.
+- Toàn bộ 25 màn hình theo mockup ở `NaCare-UI/NACare App.dc.html` đã được viết bằng Flutter, dùng dữ liệu mock (fake delay/fake error) — chưa nối API thật.
 - Chưa build/verify thực tế trên máy (thiếu SDK). Cần chạy `flutter analyze` và `flutter run` sau khi cài SDK để bắt lỗi biên dịch nếu có.

@@ -1,6 +1,6 @@
 # Kế hoạch chức năng web admin (back-office)
 
-Tài liệu này chốt các chức năng cho **web admin/back-office** vận hành và cấu hình app bệnh nhân NAHealth. Dùng kèm với `ke-hoach-20-chuc-nang-app-benh-nhan.md` (app có gì) và `giao-dien-web-admin.md` (web admin trông ra sao). File kế hoạch app trả lời "bệnh nhân dùng gì", file này trả lời "ai vận hành và config những gì phía sau".
+Tài liệu này chốt các chức năng cho **web admin/back-office** vận hành và cấu hình app bệnh nhân NACare. Dùng kèm với `ke-hoach-20-chuc-nang-app-benh-nhan.md` (app có gì) và `giao-dien-web-admin.md` (web admin trông ra sao). File kế hoạch app trả lời "bệnh nhân dùng gì", file này trả lời "ai vận hành và config những gì phía sau".
 
 ## Bối cảnh đã chốt
 
@@ -22,7 +22,7 @@ Phân loại nguồn dữ liệu quyết định web admin được **ghi** hay 
 
 | Hạng mục | Đề xuất | Lý do |
 |---|---|---|
-| Backend | **ASP.NET Core Web API + SQL Server (EF Core)**, đóng vai trò BFF chung cho app & web | Team chọn hệ .NET; tách app khỏi HIS. Chi tiết ở repo BE riêng: `../../../NAHealth-BE/docs/ke-hoach-backend-dotnet.md`. |
+| Backend | **ASP.NET Core Web API + SQL Server (EF Core)**, đóng vai trò BFF chung cho app & web | Team chọn hệ .NET; tách app khỏi HIS. Chi tiết ở repo BE riêng: `../../../NACare-BE/docs/ke-hoach-backend-dotnet.md`. |
 | Frontend admin | React + TypeScript + Refine (Ant Design) | Sinh nhanh CRUD danh mục — đúng nhu cầu config; tách FE/BE rõ. |
 | Auth admin | Tài khoản riêng cho nhân viên (không dùng OTP bệnh nhân) + RBAC + 2FA | Nhân viên nội bộ, cần audit và phân quyền chặt. |
 | Realtime | **SignalR** cho chat (12) và bảng hàng chờ (6) | Hai chức năng cần đẩy realtime; SignalR là chuẩn realtime của ASP.NET Core. |

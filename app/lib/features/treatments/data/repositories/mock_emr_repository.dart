@@ -61,7 +61,7 @@ class MockEmrRepository implements EmrRepository {
   /// tính đúng offset + trailer). Toàn bộ nội dung là ASCII nên `String.length` == số byte.
   Uint8List _demoPdf() {
     const streamContent =
-        'BT /F1 18 Tf 40 150 Td (NAHealth - phieu ket qua) Tj '
+        'BT /F1 18 Tf 40 150 Td (NACare - phieu ket qua) Tj '
         '0 -28 Td (Ban PDF demo - chua noi BE) Tj ET';
     final objects = <String>[
       '<< /Type /Catalog /Pages 2 0 R >>',

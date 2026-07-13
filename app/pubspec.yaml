@@ -1,5 +1,5 @@
-name: nahealth_app
-description: "NAHealth - Ung dung benh nhan cua Benh vien Huu Nghi Da Khoa Nghe An."
+name: nacare_app
+description: "NACare - Ung dung benh nhan cua Benh vien Huu Nghi Da Khoa Nghe An."
 publish_to: "none"
 version: 0.1.0
 

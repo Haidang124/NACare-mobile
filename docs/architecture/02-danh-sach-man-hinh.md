@@ -1,6 +1,6 @@
 # Danh sách 25 màn hình — route → file
 
-Khớp 1-1 với 25 màn hình trong mockup `NaHealth-UI/NAHealth App.dc.html` (`data-screen-label`). Cột "Trạng thái" phản ánh mức độ hoàn thiện thật của code (không phải mockup).
+Khớp 1-1 với 25 màn hình trong mockup `NaCare-UI/NACare App.dc.html` (`data-screen-label`). Cột "Trạng thái" phản ánh mức độ hoàn thiện thật của code (không phải mockup).
 
 | # | Tên màn hình (mockup) | Route | File màn hình | Trạng thái |
 |---|---|---|---|---|

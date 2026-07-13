@@ -1,4 +1,4 @@
-# Tổng quan kiến trúc app Flutter NAHealth
+# Tổng quan kiến trúc app Flutter NACare
 
 Tài liệu này giải thích **vì sao** app được tổ chức như hiện tại. Xem thêm `01-cau-truc-thu-muc.md` (cây thư mục), `02-danh-sach-man-hinh.md` (route → file), `03-mock-api-va-repository.md` (cách tách UI khỏi gọi API), `04-viec-con-lai.md` (việc chưa làm).
 

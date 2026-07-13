@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           fit: BoxFit.cover),
                     ),
                     const SizedBox(height: AppSpacing.lg),
-                    Text('NAHealth', style: AppTypography.brand),
+                    Text('NACare', style: AppTypography.brand),
                     const SizedBox(height: 4),
                     Text(
                       'Bệnh viện Hữu Nghị Đa Khoa Nghệ An',

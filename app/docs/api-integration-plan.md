@@ -1,4 +1,4 @@
-# Kế hoạch ghép API vào Mobile (NAHealth patient app)
+# Kế hoạch ghép API vào Mobile (NACare patient app)
 
 > Mục tiêu: thay dần các `Mock*Repository` bằng `Api*Repository` gọi thật tới BE, **không sửa
 > UI / provider / model**. Kiến trúc mock-first đã đặt sẵn "đường may" (seam) để làm việc này —

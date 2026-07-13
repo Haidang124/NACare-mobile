@@ -32,7 +32,7 @@ app/
 │       ├── immunization/           # sổ tiêm chủng
 │       ├── health_metrics/         # chỉ số sức khỏe
 │       └── security/                # bảo mật (PIN/sinh trắc/thiết bị) + quản lý đồng ý dữ liệu
-├── assets/images/logo.jpg          # copy từ NaHealth-UI/assets/logo.jpg
+├── assets/images/logo.jpg          # copy từ NaCare-UI/assets/logo.jpg
 ├── plan/                            # bạn đang đọc thư mục này
 ├── pubspec.yaml
 ├── analysis_options.yaml

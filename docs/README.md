@@ -1,4 +1,4 @@
-# Tài liệu dự án NAHealth
+# Tài liệu dự án NACare
 
 Toàn bộ tài liệu nằm dưới `docs/`, chia theo 2 nhóm:
 

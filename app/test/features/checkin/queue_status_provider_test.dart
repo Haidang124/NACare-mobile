@@ -7,10 +7,10 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nahealth_app/core/network/result.dart';
-import 'package:nahealth_app/features/appointments/data/models/queue_status.dart';
-import 'package:nahealth_app/features/checkin/data/repositories/checkin_repository.dart';
-import 'package:nahealth_app/features/checkin/presentation/providers/checkin_providers.dart';
+import 'package:nacare_app/core/network/result.dart';
+import 'package:nacare_app/features/appointments/data/models/queue_status.dart';
+import 'package:nacare_app/features/checkin/data/repositories/checkin_repository.dart';
+import 'package:nacare_app/features/checkin/presentation/providers/checkin_providers.dart';
 
 /// Fake repo returning fixed data — no delay, no randomness — so tests run fast and
 /// deterministically (unlike Mock*Repository, which adds fake delay/randomness for demos).

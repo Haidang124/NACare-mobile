@@ -5,7 +5,7 @@ details live in [`.agents/`](.agents/). If you change how the code works, keep t
 
 ## What this is
 
-`NAHealth` — a Flutter mobile app for patients of a single hospital. UI-first phase:
+`NACare` — a Flutter mobile app for patients of a single hospital. UI-first phase:
 all data comes from **mock repositories**; the real HIS/EMR API is wired in later without
 touching the UI. The Flutter project lives in [`app/`](app/); product & architecture docs
 live in [`docs/`](docs/).

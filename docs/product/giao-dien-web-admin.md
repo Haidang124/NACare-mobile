@@ -1,6 +1,6 @@
 # Giao diện web admin (back-office)
 
-Tài liệu này mô tả UI/UX cho **web admin/back-office** của NAHealth, dùng kèm với `chuc-nang-web-admin.md`. File chức năng trả lời "web admin làm được gì", file này trả lời "người vận hành đi qua web admin như thế nào và màn hình trông ra sao".
+Tài liệu này mô tả UI/UX cho **web admin/back-office** của NACare, dùng kèm với `chuc-nang-web-admin.md`. File chức năng trả lời "web admin làm được gì", file này trả lời "người vận hành đi qua web admin như thế nào và màn hình trông ra sao".
 
 Đối tượng người dùng: nhân viên nội bộ bệnh viện (Super Admin, Content/Marketing, CSKH, Lễ tân/Điều dưỡng, Bác sĩ/QLCL) — làm việc trên desktop, không phải bệnh nhân.
 

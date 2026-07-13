@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens taken from the mockup `NaHealth-UI/NAHealth App.dc.html`.
+/// Design tokens taken from the mockup `NaCare-UI/NACare App.dc.html`.
 /// Named semantically (not by color name) to make adding dark mode easier later.
 abstract final class AppColors {
   // Brand / primary

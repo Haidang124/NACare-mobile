@@ -62,7 +62,7 @@ Then register routes in `core/router/` and run `flutter analyze`.
 - Run `dart format .` before committing. Trailing commas drive the layout — keep them.
 - Import ordering is enforced (`directives_ordering`): `dart:` → `package:` → relative,
   each group alphabetized.
-- Prefer relative imports **within** a feature; use `package:nahealth_app/...` only in tests.
+- Prefer relative imports **within** a feature; use `package:nacare_app/...` only in tests.
 
 ## Language
 

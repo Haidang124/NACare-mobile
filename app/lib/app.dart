@@ -6,15 +6,15 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/app_localizations.dart';
 
-class NahealthApp extends ConsumerWidget {
-  const NahealthApp({super.key});
+class NacareApp extends ConsumerWidget {
+  const NacareApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      title: 'NAHealth',
+      title: 'NACare',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: router,

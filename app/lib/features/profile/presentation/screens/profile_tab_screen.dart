@@ -43,6 +43,7 @@ class ProfileTabScreen extends ConsumerWidget {
     );
     if (!confirmed) return;
     await ref.read(sessionControllerProvider.notifier).logout();
+    if (context.mounted) context.go(AppRoutes.onboarding);
   }
 
   @override

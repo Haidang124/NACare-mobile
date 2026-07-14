@@ -25,24 +25,28 @@ class ConfirmDialog {
         content: Text(message, style: AppTypography.body),
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: [
-          Expanded(
-            child: AppButton(
-              label: cancelLabel,
-              variant: AppButtonVariant.secondary,
-              height: 46,
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: AppButton(
-              label: confirmLabel,
-              variant: destructive
-                  ? AppButtonVariant.destructive
-                  : AppButtonVariant.primary,
-              height: 46,
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: cancelLabel,
+                  variant: AppButtonVariant.secondary,
+                  height: 46,
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: AppButton(
+                  label: confirmLabel,
+                  variant: destructive
+                      ? AppButtonVariant.destructive
+                      : AppButtonVariant.primary,
+                  height: 46,
+                  onPressed: () => Navigator.of(context).pop(true),
+                ),
+              ),
+            ],
           ),
         ],
       ),
